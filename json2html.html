@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>JSON parser to HTML</title>
+    <style>
+        body{
+            text-align: center;
+            font-family: arial;
+        }
+    </style>
+    <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
+</head>
+<body>
+<div id="results"></div>
+
+
+<script type="text/javascript">
+    $(document).ready(function(){
+        $.ajaxSetup({ dataType: "jsonp" });
+        $.ajax({
+            url: 'https://gist.githubusercontent.com/jizq/8177ddf6efc335bd8c2094fd2cf1a5fb/raw/e2c4eac365a3872fc9267e0c80d1b2f8b9c754a5/data.json?callback=?',
+            type: "GET",
+            dataType: "jsonp",
+            async:false,
+            success: function (response) {
+                JsonCallback(response);
+            },
+            error: function () {
+                ErrorFunction();
+            }
+
+        });
+
+
+        function JsonCallback(response)
+        {
+            var json_obj = $.parseJSON(response);//parse JSON
+            var output="<ul>";
+            for (var i in json_obj && i<=50)
+            {
+                output+="<li>" + json_obj[i].teaser + "</li>";
+                output+="<li>" + json_obj[i].description + "</li>";
+                output+="<li>" + json_obj[i].image + "</li>";
+            }
+            output+="</ul>";
+            $('#results').html(output);
+        }
+
+        function ErrorFunction() {
+            $('#results').html('Something went wrong with the importing!');
+        }
+
+    });
+</script>
+</body>
+</html>
